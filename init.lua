@@ -98,20 +98,29 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<Esc><Esc>', '<cmd>ToggleTerm<CR>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
 vim.keymap.set({ 'n', 'v' }, '<Tab>', '%')
-vim.keymap.set({ 'n', 'v' }, '<leader><Tab>', '<C-^>')
-vim.keymap.set({ 'n', 'v' }, '<leader>v', ':vsplit')
-vim.keymap.set({ 'n', 'v' }, '<leader>s', ':split')
-vim.keymap.set('n', '<left>', '0')
-vim.keymap.set('n', '<right>', '$')
-vim.keymap.set('n', '<up>', '12k')
-vim.keymap.set('n', '<down>', '12j')
-vim.keymap.set('n', '<leader>w', ':w<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>xp', ':XcodebuildProjectManager<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>xr', ':XcodebuildRenameCurrentFile<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>xc', ':XcodebuildCreateNewFile<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>xa', ':XcodebuildCodeActions<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>xx', ':XcodebuildBuildRun<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>t', ':ToggleTerm<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>t', ':ToggleTerm<CR>')
 
-vim.keymap.set('n', '<S-up>', '<C-o>')
-vim.keymap.set('n', '<S-down>', '<C-i>')
+vim.keymap.set({ 'n', 'v' }, '<leader><Tab>', '<C-^>')
+vim.keymap.set({ 'n', 'v' }, '<leader>v', ':vsplit<CR>')
+vim.keymap.set({ 'n', 'v' }, '<leader>s', ':split<CR>')
+vim.keymap.set({ 'n', 'v' }, '<left>', '0')
+vim.keymap.set({ 'n', 'v' }, '<right>', '$')
+vim.keymap.set({ 'n', 'v' }, '<up>', '12k')
+vim.keymap.set({ 'n', 'v' }, '<down>', '12j')
+vim.keymap.set({ 'n', 'v' }, '<leader>w', ':w<CR>')
+
+vim.keymap.set({ 'n', 'v' }, '<S-up>', '<C-o>')
+vim.keymap.set({ 'n', 'v' }, '<S-down>', '<C-i>')
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -462,27 +471,27 @@ require('lazy').setup({
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          map('<leader>ca', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
           -- Find references for the word under your cursor.
-          map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
-          map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
@@ -495,7 +504,7 @@ require('lazy').setup({
           -- Jump to the type of the word under your cursor.
           --  Useful when you're not sure what type a variable is and you want to see
           --  the definition of its *type*, not where it was *defined*.
-          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+          map('gt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
           -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
           ---@param client vim.lsp.Client

@@ -12,7 +12,7 @@ return {
     {
       '<f1>',
       mode = { 't', 'x', 'n', 'v' },
-      '<cmd>Yazi toggle<cr>',
+      '<cmd>Yazi<cr>',
       desc = 'Open yazi at the current file',
     },
     {
