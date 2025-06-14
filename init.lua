@@ -589,6 +589,7 @@ require('lazy').setup({
         },
       }
 
+      vim.lsp.enable 'sourcekit'
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
       --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -663,6 +664,7 @@ require('lazy').setup({
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            vim.lsp.enable(server_name)
             require('lspconfig')[server_name].setup(server)
           end,
         },
@@ -912,7 +914,7 @@ require('lazy').setup({
   { import = 'plugins' },
   require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  require 'kickstart.plugins.lint',
+  -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
@@ -948,7 +950,6 @@ require('lazy').setup({
     },
   },
 })
-vim.lsp.enable 'sourcekit'
 vim.opt.background = 'dark'
 -- vim.api.nvim_set_hl(0, 'Normal', { bg = '#000000' })
 -- The line beneath this is called `modeline`. See `:help modeline`
