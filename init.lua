@@ -329,6 +329,7 @@ require('lazy').setup({
         rust_analyzer = {},
         svelte = {},
         tailwindcss = {},
+        templ = {},
         ts_ls = {},
         lua_ls = {
           settings = {

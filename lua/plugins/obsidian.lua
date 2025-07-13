@@ -1,6 +1,7 @@
 return {
   'epwalsh/obsidian.nvim',
   version = '*', -- recommended, use latest release instead of latest commit
+  enabled = false,
   lazy = true,
   ft = 'markdown',
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
@@ -21,11 +22,11 @@ return {
     workspaces = {
       {
         name = 'all',
-        path = '~/Documents/txt/',
+        path = '~/punk.systems/txt/',
       },
       {
         name = 'memoir',
-        path = '~/Documents/txt/heart/Fuck You. A memoir/',
+        path = '~/punk.systems/txt/heart/Soul half empty/',
       },
     },
   },

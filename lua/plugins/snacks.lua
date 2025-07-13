@@ -3,6 +3,10 @@ return {
   priority = 1000,
   lazy = false,
   ---@type snacks.Config
+  ---@class snacks.dashboard.Config
+  ---@field enabled? boolean
+  ---@field sections snacks.dashboard.Section
+  ---@field formats table<string, snacks.dashboard.Text|fun(item:snacks.dashboard.Item, ctx:snacks.dashboard.Format.ctx):snacks.dashboard.Text>
   opts = {
     -- your configuration comes here
     -- or leave it empty to use the default settings
@@ -47,8 +51,15 @@ return {
       -- item field formatters
       formats = {
         icon = function(item)
+          local devicons = require 'nvim-web-devicons'
           if item.file and item.icon == 'file' or item.icon == 'directory' then
-            return M.icon(item.file, item.icon)
+            if item.icon == 'file' then
+              return ''
+            end
+            if item.icon == 'directory' then
+              return ''
+            end
+            return devicons.get_icon(item.file, nil, { default = true })
           end
           return { item.icon, width = 2, hl = 'icon' }
         end,
@@ -71,22 +82,25 @@ return {
       },
       sections = {
         { section = 'header' },
-        { section = 'keys', gap = 1, padding = 1 },
+        { icon = ' ', title = 'Keymaps', section = 'keys', indent = 2, padding = 1 },
+        { icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1 },
+        { icon = ' ', title = 'Projects', section = 'projects', indent = 2, padding = 1 },
         { section = 'startup' },
       },
     },
     -- explorer = { enabled = true },
-    indent = { enabled = true },
+    indent = { enabled = false },
     input = { enabled = true },
     image = { enabled = true },
     picker = { enabled = false },
     dim = { enabled = false },
-    notifier = { enabled = true },
+    notifier = { enabled = true, top_down = false },
     quickfile = { enabled = true },
     scope = { enabled = true },
     -- scroll = { enabled = true },
     statuscolumn = { enabled = true },
-    words = { enabled = disabled },
-    zen = { enabled = true },
+    words = { enabled = false },
+    zen = { enabled = false },
+    scratch = { enabled = true },
   },
 }
