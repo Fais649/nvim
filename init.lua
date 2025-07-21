@@ -242,8 +242,6 @@ require('lazy').setup({
   --     end, { desc = '[S]earch [N]eovim files' })
   --   end,
   -- },
-
-  -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -265,7 +263,7 @@ require('lazy').setup({
       { 'mason-org/mason.nvim', opts = {} },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
-
+      'Aietes/esp32.nvim',
       -- Useful status updates for LSP.
       { 'j-hui/fidget.nvim', opts = {} },
 
@@ -284,6 +282,7 @@ require('lazy').setup({
         ensure_installed = { 'gopls', 'rust_analyzer', 'ts_ls', 'lua_ls' },
         automatic_installation = true,
       }
+
       require('mason-tool-installer').setup {
         ensure_installed = { 'stylua' },
       }
@@ -294,13 +293,20 @@ require('lazy').setup({
       local capabilities = blink_cmp.get_lsp_capabilities()
 
       local on_attach = function(client, bufnr)
+        if string.find(vim.loop.cwd(), '.espressif') then
+          -- Detach the client if it's the default clangd.
+          -- We identify the default clangd by its command path.
+          if client.config.cmd[1] == 'clangd' then
+            client.stop()
+            return
+          end
+        end
         local map = function(keys, func, desc, modes)
           modes = modes or { 'n' }
           vim.keymap.set(modes, keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })
         end
 
         -- Basic mappings
-
         if client.server_capabilities.documentHighlightProvider then
           local group = vim.api.nvim_create_augroup('lsp_document_highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -329,11 +335,17 @@ require('lazy').setup({
         rust_analyzer = {},
         svelte = {},
         tailwindcss = {},
-        templ = {},
         ts_ls = {},
+        clangd = {
+          cmd = {
+            '/Users/Faisal/.espressif/tools/esp-clang/esp-18.1.2_20240912/esp-clang/bin/clangd',
+          },
+        },
         lua_ls = {
           settings = {
-            Lua = { completion = { callSnippet = 'Replace' } },
+            Lua = {
+              completion = { callSnippet = 'Replace' },
+            },
           },
         },
         sourcekit = {
@@ -345,20 +357,13 @@ require('lazy').setup({
         },
       }
 
-      -- vim.lsp.enable 'svelte'
-      -- vim.lsp.enable 'tailwindcss'
       -- Setup each server
       for name, opts in pairs(servers) do
         opts.capabilities = capabilities
+
         opts.on_attach = on_attach
         lspconfig[name].setup(opts)
       end
-
-      -- Diagnostic configuration
-      -- vim.fn.sign_define('DiagnosticSignError', { text = '󰅚', texthl = 'DiagnosticSignError' })
-      -- vim.fn.sign_define('DiagnosticSignWarn', { text = '󰀪', texthl = 'DiagnosticSignWarn' })
-      -- vim.fn.sign_define('DiagnosticSignInfo', { text = '󰋽', texthl = 'DiagnosticSignInfo' })
-      -- vim.fn.sign_define('DiagnosticSignHint', { text = '󰌶', texthl = 'DiagnosticSignHint' })
 
       vim.diagnostic.config {
         severity_sort = true,
@@ -389,22 +394,9 @@ require('lazy').setup({
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
-    -- keys = {
-    --   {
-    --     '<leader>f',
-    --     function()
-    --       require('conform').format { async = true, lsp_format = 'fallback' }
-    --     end,
-    --     mode = '',
-    --     desc = '[F]ormat buffer',
-    --   },
-    -- },
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
@@ -562,7 +554,7 @@ require('lazy').setup({
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
       require('mini.jump').setup {}
-      require('mini.pairs').setup {}
+      -- require('mini.pairs').setup {}
       require('mini.indentscope').setup {}
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
