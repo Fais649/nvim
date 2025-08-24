@@ -47,8 +47,14 @@ return {
       -- item field formatters
       formats = {
         icon = function(item)
-          if item.file and item.icon == 'file' or item.icon == 'directory' then
-            return M.icon(item.file, item.icon)
+          if item.file then
+            if item.icon == 'file' then
+              return ''
+            end
+
+            if item.icon == 'directory' then
+              return ' '
+            end
           end
           return { item.icon, width = 2, hl = 'icon' }
         end,
@@ -71,7 +77,8 @@ return {
       },
       sections = {
         { section = 'header' },
-        { section = 'keys', gap = 1, padding = 1 },
+        { icon = ' ', title = 'Projects', section = 'projects', indent = 2, padding = 1 },
+        { icon = ' ', title = 'Keymaps', section = 'keys', indent = 2, padding = 1 },
         { section = 'startup' },
       },
     },
@@ -83,7 +90,7 @@ return {
     dim = { enabled = false },
     notifier = { enabled = true },
     quickfile = { enabled = true },
-    scope = { enabled = true },
+    scope = { enabled = false },
     -- scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = disabled },

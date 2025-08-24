@@ -55,7 +55,7 @@ vim.keymap.set({ 'n', 'v', 'x' }, 'gr', ':FzfLua lsp_references<CR>', { desc = '
 vim.keymap.set({ 'n', 'v', 'x' }, 'gi', ':FzfLua lsp_implementations<CR>', { desc = 'Implementations' })
 vim.keymap.set({ 'n', 'v', 'x' }, 'gt', ':FzfLua lsp_typedefs<CR>', { desc = 'Type Definitions' })
 vim.keymap.set({ 'n', 'v', 'x' }, 'gw', ':FzfLua lsp_live_workspace_symbols<CR>', { desc = 'Workspace Symbols' })
-vim.keymap.set({ 'n', 'v' }, '<C-n>', vim.lsp.buf.rename, { desc = 'Rename' })
+vim.keymap.set({ 'n', 'v' }, '<leader>r', vim.lsp.buf.rename, { desc = 'Rename' })
 
 -- [[Xcodebuild]]
 vim.keymap.set({ 'n', 'v' }, '<leader>xp', ':XcodebuildProjectManager<CR>')

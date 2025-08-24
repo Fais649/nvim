@@ -11,7 +11,13 @@ return {
     -- 👇 in this section, choose your own keymappings!
     {
       '<f1>',
-      mode = { 't', 'x', 'n', 'v' },
+      mode = { 't', 'x' },
+      'q',
+      desc = 'Close yazi',
+    },
+    {
+      '<f1>',
+      mode = { 'n', 'v' },
       '<cmd>Yazi<cr>',
       desc = 'Open yazi at the current file',
     },
