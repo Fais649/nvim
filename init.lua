@@ -16,6 +16,9 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+local vimrc = vim.fn.stdpath 'config' .. '/vimrc.vim'
+vim.cmd.source(vimrc)
+
 -- local projectfile = vim.fn.getcwd() .. '/project.godot'
 -- if projectfile then
 --   vim.fn.serverstart './godothost'
