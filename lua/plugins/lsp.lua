@@ -57,6 +57,7 @@ return {
       rust_analyzer = {},
       svelte = {},
       tailwindcss = {},
+      jsonls = {},
       ts_ls = {},
       gdscript = {
         name = 'godot',
