@@ -1,27 +1,83 @@
--- [[Movement]]
-vim.keymap.set({ 'n', 'v' }, '<up>', '12k')
-vim.keymap.set({ 'n', 'v' }, '<down>', '12j')
-vim.keymap.set({ 'n', 'v' }, '<left>', '0')
-vim.keymap.set({ 'n', 'v' }, '<right>', '$')
-vim.keymap.set({ 'n', 'v' }, '<Tab>', '%')
-vim.keymap.set({ 'n', 'v' }, '<leader><Tab>', '<C-^>')
+local hyper = function(key)
+  return '<C-S-A-' .. key .. '>'
+end
 
-vim.keymap.set({ 'n', 'v' }, '<S-up>', '<C-o>')
-vim.keymap.set({ 'n', 'v' }, '<S-down>', '<C-i>')
+local hyperX = function(key, keyTwo)
+  return '<C-A-S-' .. key .. '>' .. keyTwo
+end
 
-vim.keymap.set({ 'n', 'v' }, '<leader>w', ':w<CR>')
-vim.keymap.set({ 'n', 'v' }, '<C-x>', ':x<CR>')
-vim.keymap.set({ 'n', 'v' }, "'", '*')
+-- [[Input Shortcuts]] -----------------------------
+vim.keymap.set({ 'i' }, '<A-s>', '$', { desc = '$' })
+vim.keymap.set({ 'i' }, '<A-l>', '->', { desc = '->' })
 
--- [[Window Splits]]
-vim.keymap.set({ 'n', 'v' }, '<leader>v', ':vsplit<CR>')
-vim.keymap.set({ 'n', 'v' }, '<leader>s', ':split<CR>')
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- [[Select Shortcuts]] -----------------------------
+vim.keymap.set('n', 'vaA', 'ggVG', { desc = '[A]ll' })
+-- code helpers
+vim.keymap.set({ 'n', 'v', 'x' }, 'gca', '<cmd>FzfLua lsp_code_actions<CR>', { desc = '[c]ode action' })
+vim.keymap.set({ 'n', 'v', 'x' }, 'gd', '<cmd>FzfLua lsp_definitions<CR>', { desc = '[d]efinition' })
+vim.keymap.set({ 'n', 'v', 'x' }, 'gr', '<cmd>FzfLua lsp_references<CR>', { desc = '[r]eferences' })
+vim.keymap.set({ 'n', 'v' }, '<leader>er', vim.lsp.buf.rename, { desc = '[r]ename .' })
+-----------------------------
 
--- [[ Basic Autocommands ]]
+-- [[Window Management]] -----------------------------
+vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>w<CR>', { desc = '[w]rite' })
+vim.keymap.set({ 'n', 'v' }, '<leader>x', '<cmd>x<CR>', { desc = '[x]close' })
+vim.keymap.set({ 'n', 'v' }, '<leader>bj', '<cmd>split<CR>', { desc = 'split [j]]↓' })
+vim.keymap.set({ 'n', 'v' }, '<leader>bl', '<cmd>vsplit<CR>', { desc = 'split [l]->' })
+vim.keymap.set({ 'n', 'v' }, '<leader>btl', '<cmd>vsplit<CR><C-w>T', { desc = '[y]ank . new tab' })
+vim.keymap.set({ 'n', 'v' }, '<leader>btn', '<cmd>tabnew<CR>', { desc = '[n]ew empty tab' })
+vim.keymap.set({ 'n', 'v' }, '<leader>bty', '<cmd>tabnew<CR><cmd>Yazi<CR>', { desc = '[n]ew [y]azi tab' })
+vim.keymap.set({ 'n', 'v' }, '<leader>btt', '<cmd>tabnew<CR><cmd>term<CR>', { desc = '[n]ew [t]erminal tab' })
+----------------------------------------------------------
+
+-- [[Movement]] -----------------------------
+-- in buffer
+vim.keymap.set({ 'n', 'v' }, '<up>', '14k', { desc = '↑ x14' })
+vim.keymap.set({ 'n', 'v' }, '<down>', '14j', { desc = '↓ x14' })
+vim.keymap.set({ 'n', 'v' }, '<left>', '0', { desc = 'start of line' })
+vim.keymap.set({ 'n', 'v' }, '<right>', '$', { desc = 'end of line' })
+vim.keymap.set({ 'n', 'v' }, '<Tab>', '%', { desc = 'matching [({})]' })
+vim.keymap.set({ 'n', 'v' }, "'", '*', { desc = 'Find next' })
+-- between buffers
+vim.keymap.set({ 'n', 'v' }, 'g<space>', '<C-^>', { desc = 'last[]buffer' })
+-- between tabs
+vim.keymap.set({ 'n', 'v' }, '<C-tab>', '<C-^>', { desc = 'previous buffer' })
+vim.keymap.set({ 'n', 'v' }, 'H', '<cmd>tabp<CR>', { desc = '[H]<- tab' })
+vim.keymap.set({ 'n', 'v' }, 'L', '<cmd>tabn<CR>', { desc = '[L]-> tab' })
+-- between splits
+--
+-- vim.keymap.set({ 'n', 'v' }, '<M-h>', '<C-w><C-h>', { desc = '[h]<- [s]plit' })
+-- vim.keymap.set({ 'n', 'v' }, '<M-l>', '<C-w><C-l>', { desc = '[l]->[s]plit ' })
+-- vim.keymap.set({ 'n', 'v' }, '<M-j>', '<C-w><C-j>', { desc = '[j]↓ [s]plit' })
+-- vim.keymap.set({ 'n', 'v' }, '<M-k>', '<C-w><C-k>', { desc = '[k]↑ [s]plit' })
+-- between files/directories
+vim.keymap.set({ 'n', 'v' }, '<leader>ff', '<cmd>FzfLua files <CR>', { desc = '[f]iles' })
+vim.keymap.set({ 'n', 'v' }, '<leader>f.', function()
+  require('fzf-lua').files { cwd = vim.fn.expand '%:h' }
+end, { desc = '[f]iles in [.]pwd' })
+vim.keymap.set({ 'n', 'v' }, '<leader>fm', '<cmd>FzfLua marks <CR>', { desc = '[m]arks' })
+vim.keymap.set({ 'n', 'v' }, '<leader>ft', '<cmd>FzfLua tabs <CR>', { desc = '[t]abs' })
+vim.keymap.set({ 'n', 'v' }, '<leader>fi', '<cmd>FzfLua live_grep_native<CR>', { desc = '[i]n files' })
+vim.keymap.set({ 'n', 'v' }, '<leader>fy', '<cmd>Yazi<CR>', { desc = '[y]azi' })
+-- terminals
+vim.keymap.set('t', '<Esc><Esc>', '<cmd>ToggleTerm<CR>', { desc = 'Exit terminal mode' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tt', '<cmd>ToggleTerm<CR>', { desc = '[t]erminal' })
+function _G.set_terminal_keymaps()
+  local opts = { buffer = 0 }
+  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', '<A-h>', [[<Cmd>wincmd h<CR>]], opts)
+  vim.keymap.set('t', '<A-j>', [[<Cmd>wincmd j<CR>]], opts)
+  vim.keymap.set('t', '<A-k>', [[<Cmd>wincmd k<CR>]], opts)
+  vim.keymap.set('t', '<A-l>', [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set('t', '<A-w>', [[<C-\><C-n><C-w>]], opts)
+end
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd 'autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()'
+----------------------------------------------------------
+
+-- [[ MISC ]]	----------------------------------------------------------
+-- autocmds
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
@@ -29,46 +85,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
-
--- [[Remove Search HL]]
+-- searchhl
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
--- [[Diagnostics]]
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
--- [[ZenMode]]
-vim.keymap.set({ 'n', 'v' }, '<leader>z', ':ZenMode<CR>', { desc = 'Zen' })
-
--- [[Terminal]]
+-- terminal
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-vim.keymap.set('t', '<Esc><Esc>', '<cmd>ToggleTerm<CR>', { desc = 'Exit terminal mode' })
-vim.keymap.set({ 'n', 'v' }, '<leader>t', ':ToggleTerm<CR>')
---
--- [[FzfLua]]
-vim.keymap.set({ 'n', 'v', 'x' }, '<F2>', ':FzfLua files resume=true<CR>', { desc = 'Find Files' })
-vim.keymap.set({ 'n', 'v', 'x' }, '<F3>', ':FzfLua live_grep_native resume=true<CR>', { desc = 'Live Grep' })
-vim.keymap.set({ 'n', 'v', 'x' }, '<C-c>', ':FzfLua lsp_code_actions<CR>', { desc = 'Code Action' })
-vim.keymap.set({ 'n', 'v', 'x' }, '<leader>sd', ':FzfLua lsp_workspace_diagnostics<CR>', { desc = 'Code Action' })
-vim.keymap.set({ 'n', 'v', 'x' }, '<C-d>', ':FzfLua lsp_definitions<CR>', { desc = 'Goto Declaration' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gD', ':FzfLua lsp_declarations<CR>', { desc = 'Goto Declaration' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gr', ':FzfLua lsp_references<CR>', { desc = 'References' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gi', ':FzfLua lsp_implementations<CR>', { desc = 'Implementations' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gt', ':FzfLua lsp_typedefs<CR>', { desc = 'Type Definitions' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gw', ':FzfLua lsp_live_workspace_symbols<CR>', { desc = 'Workspace Symbols' })
-vim.keymap.set({ 'n', 'v' }, '<leader>r', vim.lsp.buf.rename, { desc = 'Rename' })
-
--- [[Xcodebuild]]
-vim.keymap.set({ 'n', 'v' }, '<leader>xp', ':XcodebuildProjectManager<CR>')
-vim.keymap.set({ 'n', 'v' }, '<leader>xr', ':XcodebuildRenameCurrentFile<CR>')
-vim.keymap.set({ 'n', 'v' }, '<leader>xc', ':XcodebuildCreateNewFile<CR>')
-vim.keymap.set({ 'n', 'v' }, '<leader>xa', ':XcodebuildCodeActions<CR>')
-vim.keymap.set({ 'n', 'v' }, '<leader>xx', ':XcodebuildBuildRun<CR>')
-vim.keymap.set({ 'n', 'v' }, '<leader>xl', ':XcodebuildToggleLogs<CR>')
-
--- [[Yanky]]
-vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-vim.keymap.set({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
-vim.keymap.set('n', '<c-u>', '<Plug>(YankyPreviousEntry)')
-vim.keymap.set('n', '<c-i>', '<Plug>(YankyNextEntry)')
+----------------------------------------------------------

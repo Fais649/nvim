@@ -20,6 +20,7 @@ return {
     -- Installs the debug adapters for you
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
+    'theHamsta/nvim-dap-virtual-text',
 
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
@@ -27,57 +28,56 @@ return {
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
     {
-      '<F5>',
+      '<leader>dd',
       function()
         require('dap').continue()
       end,
       desc = 'Debug: Start/Continue',
     },
     {
-      '<F6>',
+      '<leader>dj',
       function()
         require('dap').step_into()
       end,
       desc = 'Debug: Step Into',
     },
     {
-      '<F7>',
+      '<leader>dl',
       function()
         require('dap').step_over()
       end,
       desc = 'Debug: Step Over',
     },
     {
-      '<F8>',
+      '<leader>dk',
       function()
         require('dap').step_out()
       end,
       desc = 'Debug: Step Out',
     },
     {
-      '<leader>b',
+      '<leader>dr',
+      function()
+        require('dap').repl.open()
+      end,
+      desc = 'Debug: Toggle Breakpoint',
+    },
+    {
+      '<leader>db',
       function()
         require('dap').toggle_breakpoint()
       end,
       desc = 'Debug: Toggle Breakpoint',
     },
     {
-      '<leader>B',
+      '<leader>dB',
       function()
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
       desc = 'Debug: Set Breakpoint',
     },
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
-      '<leader>D',
-      function()
-        require('dap').continue()
-      end,
-      desc = 'Debug: run',
-    },
-    {
-      '<leader>d',
+      '<leader>d<TAB>',
       function()
         require('dapui').toggle()
       end,
@@ -94,23 +94,85 @@ return {
       port = 6006,
     }
 
-    dap.configurations.gdscript = {
-      {
-        type = 'godot',
-        request = 'launch',
-        name = 'Launch scene',
-        project = '${workspaceFolder}',
-        launch_scene = true,
+    require('mason-nvim-dap').setup {
+      automatic_setup = true,
+      handlers = {
+        function(config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+        gdscript = function(config)
+          config.configurations = {
+            {
+              type = 'godot',
+              request = 'launch',
+              name = 'Launch scene',
+              project = '${workspaceFolder}',
+              launch_scene = true,
+            },
+          }
+
+          require('mason-nvim-dap').default_setup(config) -- don't forget this!
+        end,
+        php = function(config)
+          config.configurations = {
+            {
+              type = 'php',
+              request = 'launch',
+              name = 'Listen for XDebug',
+              port = 9003,
+              log = true,
+              pathMappings = {
+                ['/var/www/html/'] = vim.fn.getcwd() .. '/',
+              },
+              hostname = '0.0.0.0',
+            },
+            {
+              type = 'shell',
+              request = 'ddev xdebug on',
+              name = 'DDEV: Activate XDebug',
+            },
+            {
+              type = 'shell',
+              request = 'ddev xdebug off',
+              name = 'DDEV: Deactivate XDebug',
+            },
+          }
+
+          require('mason-nvim-dap').default_setup(config) -- don't forget this!
+        end,
+      },
+
+      -- You'll need to check that you have the required things installed
+      -- online, please don't ask me how to install them :)
+      ensure_installed = {
+        'delve',
+        'php-debug-adapter',
       },
     }
 
-    require('mason-nvim-dap').setup {
-      automatic_installation = true,
-      handlers = {},
-      ensure_installed = {
-        'delve',
-      },
-    }
+    -- dap.configurations = {
+    --   {
+    --     type = 'php',
+    --     request = 'launch',
+    --     name = 'Listen for XDebug',
+    --     port = 9003,
+    --     log = true,
+    --     pathMappings = {
+    --       ['/var/www/html/'] = vim.fn.getcwd() .. '/',
+    --     },
+    --     hostname = '0.0.0.0',
+    --   },
+    -- }
+
+    -- local msdap = require 'mason-nvim-dap'
+    -- msdap.setup {
+    --   automatic_installation = true,
+    --   handlers = {},
+    --   ensure_installed = {
+    --     'delve',
+    --     'php-debug-adapter',
+    --   },
+    -- }
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|

@@ -14,8 +14,9 @@ return {
 
     require('mason').setup()
     require('mason-lspconfig').setup {
-      ensure_installed = { 'gopls', 'rust_analyzer', 'ts_ls' },
+      ensure_installed = { 'lua_ls', 'phpactor', 'jsonls', 'clangd', 'tailwindcss', 'gopls', 'rust_analyzer', 'ts_ls' },
       automatic_installation = true,
+      automatic_enable = false,
     }
     require('mason-tool-installer').setup {
       ensure_installed = { 'stylua' },
@@ -47,8 +48,8 @@ return {
 
       if client.server_capabilities.inlayHintProvider then
         map('<leader>th', function()
-          vim.lsp.inlay_hint(bufnr, nil)
-        end, 'Toggle Inlay Hints')
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+        end, '[i]nlay hints')
       end
     end
 
@@ -56,9 +57,20 @@ return {
       gopls = {},
       rust_analyzer = {},
       svelte = {},
+      phpactor = {},
       tailwindcss = {},
       jsonls = {},
+      marksman = {},
       ts_ls = {},
+      -- twiggy_language_server = {
+      --   settings = {
+      --     twiggy = {
+      --       framework = 'symfony',
+      --       phpExecutable = 'php-legacy',
+      --       symfonyConsolePath = 'bin/console',
+      --     },
+      --   },
+      -- },
       gdscript = {
         name = 'godot',
         cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
@@ -67,7 +79,6 @@ return {
         Lua = {
           workspace = {
             library = {
-              ['/home/fais/.local/share/nvim/lazy/love2d.nvim/love2d/library'] = true,
               ['/home/fais/punk.systems/code/lua/love/lovrd/api/cats'] = true,
               ['/home/fais/.local/share/nvim/lazy/love2d.nvim/luasocket/library'] = true,
             },
@@ -83,7 +94,7 @@ return {
       -- },
     }
 
-    vim.lsp.enable 'sourcekit'
+    -- vim.lsp.enable 'sourcekit'
     for name, opts in pairs(servers) do
       opts.capabilities = capabilities
       opts.on_attach = on_attach

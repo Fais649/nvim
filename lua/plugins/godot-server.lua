@@ -22,11 +22,11 @@ return {
         vim.keymap.set(m, k, v, { silent = true })
       end
 
-      map('n', '<leader>dr', godot.debugger.debug)
-      map('n', '<leader>dd', godot.debugger.debug_at_cursor)
-      map('n', '<leader>dq', godot.debugger.quit)
-      map('n', '<leader>dc', godot.debugger.continue)
-      map('n', '<leader>ds', godot.debugger.step)
+      map('n', '<leader>dgr', godot.debugger.debug)
+      map('n', '<leader>dgd', godot.debugger.debug_at_cursor)
+      map('n', '<leader>dgq', godot.debugger.quit)
+      map('n', '<leader>dgc', godot.debugger.continue)
+      map('n', '<leader>dgs', godot.debugger.step)
     end,
   },
   -- { 'Cretezy/godot-server.nvim', },
