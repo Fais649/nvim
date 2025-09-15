@@ -60,6 +60,7 @@ require('lazy').setup({
       },
       spec = {
         { 'g', group = '[g]oto' },
+        { '<leader>G', group = '[G]it' },
         { 'ge', hidden = true },
         { 'gn', hidden = true },
         { 'gN', hidden = true },
@@ -90,6 +91,7 @@ require('lazy').setup({
         { '<leader>bt', group = '[t]ab' },
         { '<leader>e', group = '[e]dit' },
         { '<leader>t', group = '[t]oggle' },
+        { '<leader>tG', group = '[G]it' },
         { '<leader>P', group = '[P]hp' },
         { '<leader>L', group = '[L]ove' },
         { '<leader>X', group = '[X]code' },

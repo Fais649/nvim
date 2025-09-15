@@ -81,6 +81,9 @@ return {
           -- called once _after_ the fzf interface is closed
           -- on_close = function() ... end
         },
+        fzf_opts = {
+          ['--header'] = ' ',
+        },
         actions = {
           files = {
             ['enter'] = actions.file_switch_or_edit,

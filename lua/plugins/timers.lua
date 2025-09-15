@@ -1,5 +1,6 @@
 return {
   'ravsii/timers.nvim',
+  enabled = false,
   ---@module "timers.config"
   ---@type Config
   opts = {

@@ -22,7 +22,7 @@ return {
       --   mode = function(str)
       --     return "\\<" .. str
       --   end,
-      mode = 'fuzzy',
+      mode = 'exact',
       -- behave like `incsearch`
       incremental = false,
       -- Excluded filetypes and custom window filters
@@ -142,8 +142,8 @@ return {
       search = {
         -- when `true`, flash will be activated during regular search by default.
         -- You can always toggle when searching with `require("flash").toggle()`
-        enabled = false,
-        highlight = { backdrop = false },
+        enabled = true,
+        highlight = { backdrop = true },
         jump = { history = true, register = true, nohlsearch = true },
         search = {
           -- `forward` will be automatically set to the search direction
@@ -168,7 +168,7 @@ return {
           -- opts.jump_labels = vim.v.count == 0 and vim.fn.mode(true):find("o")
         end,
         -- hide after jump when not using jump labels
-        autohide = false,
+        autohide = true,
         -- show jump labels
         jump_labels = true,
         -- set to `false` to use the current line only
@@ -189,20 +189,20 @@ return {
             [';'] = 'next', -- set to `right` to always go right
             [','] = 'prev', -- set to `left` to always go left
             -- clever-f style
-            [motion:lower()] = 'next',
-            [motion:upper()] = 'prev',
+            -- [motion:lower()] = 'next',
+            -- [motion:upper()] = 'prev',
             -- jump2d style: same case goes next, opposite case goes prev
-            -- [motion] = "next",
-            -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
+            [motion] = 'next',
+            [motion:match '%l' and motion:upper() or motion:lower()] = 'prev',
           }
         end,
         search = { wrap = false },
-        highlight = { backdrop = true },
+        highlight = { backdrop = false },
         jump = {
           register = false,
           -- when using jump labels, set to 'true' to automatically jump
           -- or execute a motion when there is only one match
-          autojump = false,
+          autojump = true,
         },
       },
       -- options used for treesitter selections
@@ -233,7 +233,7 @@ return {
     -- `require("flash").prompt()` is always available to get the prompt text
     prompt = {
       enabled = true,
-      prefix = { { '⚡ Flash', 'FlashPromptIcon' } },
+      prefix = { { '⚡ Jump', 'FlashPromptIcon' } },
       win_config = {
         relative = 'editor',
         width = 10, -- when <=1 it's a percentage of the editor width

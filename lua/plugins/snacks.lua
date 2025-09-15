@@ -80,11 +80,11 @@ return {
     quickfile = { enabled = true },
     picker = { enabled = false },
     dim = { enabled = false },
-    notifier = { enabled = false },
+    notifier = { enabled = true },
     scope = { enabled = false },
     -- scroll = { enabled = true },
     statuscolumn = { enabled = true },
-    words = { enabled = disabled },
+    words = { enabled = false },
     zen = { enabled = false },
   },
 }

@@ -7,15 +7,15 @@ local hyperX = function(key, keyTwo)
 end
 
 -- [[Input Shortcuts]] -----------------------------
-vim.keymap.set({ 'i' }, '<A-s>', '$', { desc = '$' })
-vim.keymap.set({ 'i' }, '<A-l>', '->', { desc = '->' })
+vim.keymap.set({ 'i' }, '<M-s>', '$', { desc = '$' })
+vim.keymap.set({ 'i' }, '<M-l>', '->', { desc = '->' })
 
 -- [[Select Shortcuts]] -----------------------------
 vim.keymap.set('n', 'vaA', 'ggVG', { desc = '[A]ll' })
 -- code helpers
-vim.keymap.set({ 'n', 'v', 'x' }, 'gca', '<cmd>FzfLua lsp_code_actions<CR>', { desc = '[c]ode action' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gd', '<cmd>FzfLua lsp_definitions<CR>', { desc = '[d]efinition' })
-vim.keymap.set({ 'n', 'v', 'x' }, 'gr', '<cmd>FzfLua lsp_references<CR>', { desc = '[r]eferences' })
+vim.keymap.set({ 'n', 'v', 'x' }, 'gca', '<cmd>:silent FzfLua lsp_code_actions<CR>', { silent = true, desc = '[c]ode action' })
+vim.keymap.set({ 'n', 'v', 'x' }, 'gd', '<cmd>:silent FzfLua lsp_definitions<CR>', { silent = true, desc = '[d]efinition' })
+vim.keymap.set({ 'n', 'v', 'x' }, 'gr', '<cmd>:silent FzfLua lsp_references<CR>', { silent = true, desc = '[r]eferences' })
 vim.keymap.set({ 'n', 'v' }, '<leader>er', vim.lsp.buf.rename, { desc = '[r]ename .' })
 -----------------------------
 
@@ -25,9 +25,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>x', '<cmd>x<CR>', { desc = '[x]close' })
 vim.keymap.set({ 'n', 'v' }, '<leader>bj', '<cmd>split<CR>', { desc = 'split [j]]↓' })
 vim.keymap.set({ 'n', 'v' }, '<leader>bl', '<cmd>vsplit<CR>', { desc = 'split [l]->' })
 vim.keymap.set({ 'n', 'v' }, '<leader>btl', '<cmd>vsplit<CR><C-w>T', { desc = '[y]ank . new tab' })
-vim.keymap.set({ 'n', 'v' }, '<leader>btn', '<cmd>tabnew<CR>', { desc = '[n]ew empty tab' })
-vim.keymap.set({ 'n', 'v' }, '<leader>bty', '<cmd>tabnew<CR><cmd>Yazi<CR>', { desc = '[n]ew [y]azi tab' })
-vim.keymap.set({ 'n', 'v' }, '<leader>btt', '<cmd>tabnew<CR><cmd>term<CR>', { desc = '[n]ew [t]erminal tab' })
+vim.keymap.set({ 'n', 'v' }, '<leader>bn', '<cmd>tabnew<CR>', { desc = '[n]ew empty tab' })
+vim.keymap.set({ 'n', 'v' }, '<leader>by', '<cmd>tabnew<CR><cmd>Yazi<CR>', { desc = '[n]ew [y]azi tab' })
+vim.keymap.set({ 'n', 'v' }, '<leader>bt', '<cmd>tabnew<CR><cmd>term<CR>', { desc = '[n]ew [t]erminal tab' })
 ----------------------------------------------------------
 
 -- [[Movement]] -----------------------------
@@ -36,20 +36,16 @@ vim.keymap.set({ 'n', 'v' }, '<up>', '14k', { desc = '↑ x14' })
 vim.keymap.set({ 'n', 'v' }, '<down>', '14j', { desc = '↓ x14' })
 vim.keymap.set({ 'n', 'v' }, '<left>', '0', { desc = 'start of line' })
 vim.keymap.set({ 'n', 'v' }, '<right>', '$', { desc = 'end of line' })
-vim.keymap.set({ 'n', 'v' }, '<Tab>', '%', { desc = 'matching [({})]' })
+vim.keymap.set({ 'n', 'v' }, '-', '%', { desc = 'matching [({})]', noremap = true })
 vim.keymap.set({ 'n', 'v' }, "'", '*', { desc = 'Find next' })
 -- between buffers
-vim.keymap.set({ 'n', 'v' }, 'g<space>', '<C-^>', { desc = 'last[]buffer' })
+vim.keymap.set({ 'n', 'v' }, '<M-Tab>', '<C-^>', { desc = 'previous[_]buffer' })
 -- between tabs
-vim.keymap.set({ 'n', 'v' }, '<C-tab>', '<C-^>', { desc = 'previous buffer' })
-vim.keymap.set({ 'n', 'v' }, 'H', '<cmd>tabp<CR>', { desc = '[H]<- tab' })
-vim.keymap.set({ 'n', 'v' }, 'L', '<cmd>tabn<CR>', { desc = '[L]-> tab' })
--- between splits
---
--- vim.keymap.set({ 'n', 'v' }, '<M-h>', '<C-w><C-h>', { desc = '[h]<- [s]plit' })
--- vim.keymap.set({ 'n', 'v' }, '<M-l>', '<C-w><C-l>', { desc = '[l]->[s]plit ' })
--- vim.keymap.set({ 'n', 'v' }, '<M-j>', '<C-w><C-j>', { desc = '[j]↓ [s]plit' })
--- vim.keymap.set({ 'n', 'v' }, '<M-k>', '<C-w><C-k>', { desc = '[k]↑ [s]plit' })
+vim.keymap.set({ 'n', 'v' }, '<C-h>', '<cmd>tabp<CR>', { desc = '[H]<- tab' })
+vim.keymap.set({ 'n', 'v' }, '<C-l>', '<cmd>tabn<CR>', { desc = '[L]-> tab' })
+-- history
+vim.keymap.set({ 'n', 'v' }, '<C-k>', '<C-o>', { desc = '[H]<- tab' })
+vim.keymap.set({ 'n', 'v' }, '<C-j>', '<C-i>', { desc = '[L]-> tab' })
 -- between files/directories
 vim.keymap.set({ 'n', 'v' }, '<leader>ff', '<cmd>FzfLua files <CR>', { desc = '[f]iles' })
 vim.keymap.set({ 'n', 'v' }, '<leader>f.', function()
