@@ -53,6 +53,7 @@ return {
       end
     end
 
+    -- vim.lsp.enable 'vtsls'
     local servers = {
       gopls = {},
       rust_analyzer = {},
@@ -62,6 +63,40 @@ return {
       jsonls = {},
       marksman = {},
       ts_ls = {},
+      -- vtsls = {
+      --   filetypes = {
+      --     'javascript',
+      --   },
+      --   settings = {
+      --     complete_function_calls = true,
+      --     vtsls = {
+      --       enableMoveToFileCodeAction = true,
+      --       autoUseWorkspaceTsdk = true,
+      --       experimental = {
+      --         maxInlayHintLength = 30,
+      --         completion = {
+      --           enableServerSideFuzzyMatch = true,
+      --         },
+      --       },
+      --     },
+      --     typescript = {
+      --       updateImportsOnFileMove = { enabled = 'always' },
+      --       suggest = {
+      --         completeFunctionCalls = true,
+      --       },
+      --       inlayHints = {
+      --         enumMemberValues = { enabled = true },
+      --         functionLikeReturnTypes = { enabled = true },
+      --         parameterNames = { enabled = 'literals' },
+      --         parameterTypes = { enabled = true },
+      --         propertyDeclarationTypes = { enabled = true },
+      --         variableTypes = { enabled = false },
+      --       },
+      --     },
+      --   },
+      -- },
+      -- eslint = {},
+      clangd = {},
       -- twiggy_language_server = {
       --   settings = {
       --     twiggy = {
@@ -95,6 +130,7 @@ return {
     }
 
     -- vim.lsp.enable 'sourcekit'
+    vim.lsp.enable 'jsonls'
     for name, opts in pairs(servers) do
       opts.capabilities = capabilities
       opts.on_attach = on_attach
