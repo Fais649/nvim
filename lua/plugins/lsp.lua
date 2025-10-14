@@ -9,7 +9,7 @@ return {
   },
   event = 'VimEnter',
   config = function()
-    local lspconfig = require 'lspconfig'
+    -- local lspconfig = require 'lspconfig'
     local blink_cmp = require 'blink.cmp'
 
     require('mason').setup()
@@ -53,59 +53,18 @@ return {
       end
     end
 
-    -- vim.lsp.enable 'vtsls'
     local servers = {
       gopls = {},
+      qmlls = {},
       rust_analyzer = {},
       svelte = {},
       phpactor = {},
       tailwindcss = {},
       jsonls = {},
+      cmake = {},
       marksman = {},
       ts_ls = {},
-      -- vtsls = {
-      --   filetypes = {
-      --     'javascript',
-      --   },
-      --   settings = {
-      --     complete_function_calls = true,
-      --     vtsls = {
-      --       enableMoveToFileCodeAction = true,
-      --       autoUseWorkspaceTsdk = true,
-      --       experimental = {
-      --         maxInlayHintLength = 30,
-      --         completion = {
-      --           enableServerSideFuzzyMatch = true,
-      --         },
-      --       },
-      --     },
-      --     typescript = {
-      --       updateImportsOnFileMove = { enabled = 'always' },
-      --       suggest = {
-      --         completeFunctionCalls = true,
-      --       },
-      --       inlayHints = {
-      --         enumMemberValues = { enabled = true },
-      --         functionLikeReturnTypes = { enabled = true },
-      --         parameterNames = { enabled = 'literals' },
-      --         parameterTypes = { enabled = true },
-      --         propertyDeclarationTypes = { enabled = true },
-      --         variableTypes = { enabled = false },
-      --       },
-      --     },
-      --   },
-      -- },
-      -- eslint = {},
       clangd = {},
-      -- twiggy_language_server = {
-      --   settings = {
-      --     twiggy = {
-      --       framework = 'symfony',
-      --       phpExecutable = 'php-legacy',
-      --       symfonyConsolePath = 'bin/console',
-      --     },
-      --   },
-      -- },
       gdscript = {
         name = 'godot',
         cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
@@ -130,11 +89,13 @@ return {
     }
 
     -- vim.lsp.enable 'sourcekit'
-    vim.lsp.enable 'jsonls'
+    -- vim.lsp.enable 'jsonls'
+    -- vim.lsp.enable 'cmake'
     for name, opts in pairs(servers) do
       opts.capabilities = capabilities
       opts.on_attach = on_attach
-      lspconfig[name].setup(opts)
+      vim.lsp.config(name, opts)
+      vim.lsp.enable(name)
     end
 
     vim.diagnostic.config {
