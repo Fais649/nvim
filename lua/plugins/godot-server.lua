@@ -1,6 +1,7 @@
 return {
   {
     'lommix/godot.nvim',
+    enabled = false,
     config = function()
       --godot.lua
       local ok, godot = pcall(require, 'godot')

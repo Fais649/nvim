@@ -9,17 +9,16 @@ return {
   },
   event = 'VimEnter',
   config = function()
-    -- local lspconfig = require 'lspconfig'
     local blink_cmp = require 'blink.cmp'
 
     require('mason').setup()
     require('mason-lspconfig').setup {
-      ensure_installed = { 'lua_ls', 'phpactor', 'jsonls', 'clangd', 'tailwindcss', 'gopls', 'rust_analyzer', 'ts_ls' },
+      -- ensure_installed = { 'lua_ls', 'phpactor', 'jsonls', 'clangd', 'tailwindcss', 'gopls', 'rust_analyzer', 'ts_ls' },
       automatic_installation = true,
       automatic_enable = false,
     }
     require('mason-tool-installer').setup {
-      ensure_installed = { 'stylua' },
+      -- ensure_installed = { 'stylua' },
     }
 
     require('fidget').setup {}
@@ -47,7 +46,7 @@ return {
       end
 
       if client.server_capabilities.inlayHintProvider then
-        map('<leader>th', function()
+        map('<leader>eth', function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
         end, '[i]nlay hints')
       end
@@ -102,7 +101,8 @@ return {
       severity_sort = true,
       float = { border = 'rounded', source = 'if_many' },
       underline = { severity = vim.diagnostic.severity.ERROR },
-      virtual_text = { source = 'if_many', spacing = 2 },
+      -- virtual_text = { source = 'if_many', spacing = 2 },
+      virtual_lines = true,
       signs = {
         text = {
           [vim.diagnostic.severity.ERROR] = '󰅚',

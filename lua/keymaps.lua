@@ -15,6 +15,7 @@ vim.keymap.set('n', 'vaA', 'ggVG', { desc = '[A]ll' })
 -- code helpers
 vim.keymap.set({ 'n', 'v', 'x' }, 'gd', '<cmd>:silent FzfLua lsp_definitions<CR>', { silent = true, desc = '[d]efinition' })
 vim.keymap.set({ 'n', 'v', 'x' }, 'gr', '<cmd>:silent FzfLua lsp_references<CR>', { silent = true, desc = '[r]eferences' })
+vim.keymap.set({ 'n', 'v', 'x' }, '<leader>ed', '<cmd>:FzfLua lsp_document_diagnostics<CR>', { silent = true, desc = '[d]iagnostics' })
 vim.keymap.set({ 'n', 'v' }, '<leader>er', vim.lsp.buf.rename, { desc = '[r]ename .' })
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>ea', '<cmd>:silent FzfLua lsp_code_actions<CR>', { silent = true, desc = '[c]ode action' })
 -----------------------------
@@ -48,7 +49,27 @@ vim.keymap.set({ 'n', 'v' }, '<C-k>', '<C-o>', { desc = '[H]<- tab' })
 vim.keymap.set({ 'n', 'v' }, '<C-j>', '<C-i>', { desc = '[L]-> tab' })
 -- between files/directories
 vim.keymap.set({ 'n', 'v' }, '<leader>ff', '<cmd>FzfLua files <CR>', { desc = '[f]iles' })
-vim.keymap.set({ 'n', 'v' }, '<leader>fF', '<cmd>FzfLua files cwd=~<CR>', { desc = '[f]iles' })
+vim.keymap.set('n', '<leader>f~', function()
+  require('fzf-lua').files {
+    prompt = '󰝰  Select directory> ',
+    cwd = vim.fn.expand '~', -- start in home dir
+    fd_opts = '--type d', -- only show directories
+    file_icons = false,
+    actions = {
+      ['default'] = function(selected)
+        if not selected or vim.tbl_isempty(selected) then
+          return
+        end
+        local dir = selected[1]
+        vim.cmd('cd ~/' .. vim.fn.fnameescape(dir))
+        print('📂 Changed directory to: ' .. dir)
+        vim.schedule(function()
+          require('fzf-lua').files { cwd = dir }
+        end)
+      end,
+    },
+  }
+end, { desc = 'Fzf: cd into a dir (from ~)' })
 vim.keymap.set({ 'n', 'v' }, '<leader>f.', function()
   require('fzf-lua').files { cwd = vim.fn.expand '%:h' }
 end, { desc = '[f]iles in [.]pwd' })
