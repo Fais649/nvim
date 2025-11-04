@@ -55,6 +55,7 @@ return {
     local servers = {
       gopls = {},
       qmlls = {},
+      astro = {},
       rust_analyzer = {},
       svelte = {},
       phpactor = {},
@@ -102,7 +103,8 @@ return {
       float = { border = 'rounded', source = 'if_many' },
       underline = { severity = vim.diagnostic.severity.ERROR },
       -- virtual_text = { source = 'if_many', spacing = 2 },
-      virtual_lines = true,
+      -- virtual_lines = true,
+      virtual_lines = false,
       signs = {
         text = {
           [vim.diagnostic.severity.ERROR] = '󰅚',
