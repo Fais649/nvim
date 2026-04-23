@@ -1,36 +1,28 @@
--- debug.lua
---
--- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
-
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
-    -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
-
-    -- Required dependency for nvim-dap-ui
+    'igorlfs/nvim-dap-view',
     'nvim-neotest/nvim-nio',
-
-    -- Installs the debug adapters for you
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
     'theHamsta/nvim-dap-virtual-text',
-
-    -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    'mxsdev/nvim-dap-vscode-js',
   },
   keys = {
-    -- Basic debugging keymaps, feel free to change to your liking!
     {
       '<leader>dd',
       function()
         require('dap').continue()
+      end,
+      desc = 'Debug: Start/Continue',
+    },
+
+    {
+      '<leader>dq',
+      function()
+        require('dap').terminate()
       end,
       desc = 'Debug: Start/Continue',
     },
@@ -56,9 +48,9 @@ return {
       desc = 'Debug: Step Out',
     },
     {
-      '<leader>dr',
+      '<leader>D',
       function()
-        require('dap').repl.open()
+        require('dap-view').toggle()
       end,
       desc = 'Debug: Toggle Breakpoint',
     },
@@ -86,32 +78,104 @@ return {
   },
   config = function()
     local dap = require 'dap'
-    local dapui = require 'dapui'
+    -- local dapui = require 'dapui'
+    local utils = require 'dap.utils'
 
+    dap.adapters['pwa-node'] = {
+      type = 'server',
+      port = '5173',
+      executable = {
+        command = 'js-debug-adapter',
+        args = {
+          '5173',
+        },
+      },
+    }
     dap.adapters.godot = {
       type = 'server',
       host = '127.0.0.1',
       port = 6006,
     }
+    dap.configurations.gdscript = {
+      {
+        type = 'godot',
+        request = 'launch',
+        name = 'Launch scene',
+        project = '${workspaceFolder}',
+      },
+    }
+
+    for _, language in ipairs { 'javascript' } do
+      dap.configurations[language] = {
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'Launch file',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+        },
+        {
+          type = 'pwa-node',
+          request = 'attach',
+          name = 'Attach to process ID',
+          processId = utils.pick_process,
+          cwd = '${workspaceFolder}',
+        },
+        {
+          type = 'pwa-chrome',
+          request = 'launch',
+          name = 'Launch & Debug Chrome',
+          url = function()
+            local co = coroutine.running()
+            return coroutine.create(function()
+              vim.ui.input({
+                prompt = 'Enter URL: ',
+                default = 'http://localhost:3000',
+              }, function(url)
+                if url == nil or url == '' then
+                  return
+                else
+                  coroutine.resume(co, url)
+                end
+              end)
+            end)
+          end,
+          webRoot = vim.fn.getcwd(),
+          protocol = 'inspector',
+          sourceMaps = true,
+          userDataDir = false,
+        },
+
+        {
+          name = 'Run debug server',
+          type = 'pwa-node',
+          request = 'launch',
+          command = 'bun run dev',
+          address = 'localhost',
+          port = 5173,
+          restart = true,
+          skipFiles = '<node_internals>/**',
+          trace = true,
+        },
+        {
+          name = 'Attach to Bun in Docker',
+          type = 'pwa-node',
+          request = 'launch',
+          address = 'localhost',
+          port = 4000,
+          restart = true,
+          skipFiles = '<node_internals>/**',
+          trace = true,
+        },
+      }
+    end
 
     require('mason-nvim-dap').setup {
       automatic_setup = true,
+      automatic_installation = false,
       handlers = {
         function(config)
           require('mason-nvim-dap').default_setup(config)
-        end,
-        gdscript = function(config)
-          config.configurations = {
-            {
-              type = 'godot',
-              request = 'launch',
-              name = 'Launch scene',
-              project = '${workspaceFolder}',
-              launch_scene = true,
-            },
-          }
-
-          require('mason-nvim-dap').default_setup(config) -- don't forget this!
         end,
         php = function(config)
           config.configurations = {
@@ -142,59 +206,32 @@ return {
         end,
       },
 
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
       ensure_installed = {
         'delve',
         'php-debug-adapter',
       },
     }
 
-    -- dap.configurations = {
-    --   {
-    --     type = 'php',
-    --     request = 'launch',
-    --     name = 'Listen for XDebug',
-    --     port = 9003,
-    --     log = true,
-    --     pathMappings = {
-    --       ['/var/www/html/'] = vim.fn.getcwd() .. '/',
+    -- dapui.setup {
+    --   icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+    --   controls = {
+    --     icons = {
+    --       pause = '⏸',
+    --       play = '▶',
+    --       step_into = '⏎',
+    --       step_over = '⏭',
+    --       step_out = '⏮',
+    --       step_back = 'b',
+    --       run_last = '▶▶',
+    --       terminate = '⏹',
+    --       disconnect = '⏏',
     --     },
-    --     hostname = '0.0.0.0',
     --   },
     -- }
-
-    -- local msdap = require 'mason-nvim-dap'
-    -- msdap.setup {
-    --   automatic_installation = true,
-    --   handlers = {},
-    --   ensure_installed = {
-    --     'delve',
-    --     'php-debug-adapter',
-    --   },
-    -- }
-
-    -- Dap UI setup
-    -- For more information, see |:help nvim-dap-ui|
-    dapui.setup {
-      icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-      controls = {
-        icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
-        },
-      },
-    }
 
     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
     vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+
     local breakpoint_icons = vim.g.have_nerd_font
         and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
       or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
@@ -204,9 +241,9 @@ return {
       vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
     end
 
-    dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    dap.listeners.before.event_exited['dapui_config'] = dapui.close
+    -- dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+    -- dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+    -- dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     require('dap-go').setup {
       delve = {

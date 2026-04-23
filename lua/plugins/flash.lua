@@ -58,7 +58,7 @@ return {
       -- clear highlight after jump
       nohlsearch = false,
       -- automatically jump when there is only one match
-      autojump = true,
+      autojump = false,
       -- You can force inclusive/exclusive jumps by setting the
       -- `inclusive` option. By default it will be automatically
       -- set based on the mode.
@@ -143,7 +143,7 @@ return {
         -- when `true`, flash will be activated during regular search by default.
         -- You can always toggle when searching with `require("flash").toggle()`
         enabled = false,
-        highlight = { backdrop = true },
+        highlight = { backdrop = false },
         jump = { history = true, register = true, nohlsearch = true },
         search = {
           -- `forward` will be automatically set to the search direction
@@ -189,11 +189,11 @@ return {
             [';'] = 'next', -- set to `right` to always go right
             [','] = 'prev', -- set to `left` to always go left
             -- clever-f style
-            -- [motion:lower()] = 'next',
-            -- [motion:upper()] = 'prev',
+            [motion:lower()] = 'next',
+            [motion:upper()] = 'prev',
             -- jump2d style: same case goes next, opposite case goes prev
-            [motion] = 'next',
-            [motion:match '%l' and motion:upper() or motion:lower()] = 'prev',
+            -- [motion] = "next",
+            -- [motion:match("%l") and motion:upper() or motion:lower()] = "prev",
           }
         end,
         search = { wrap = false },
@@ -202,7 +202,7 @@ return {
           register = false,
           -- when using jump labels, set to 'true' to automatically jump
           -- or execute a motion when there is only one match
-          autojump = true,
+          autojump = false,
         },
       },
       -- options used for treesitter selections
@@ -233,10 +233,11 @@ return {
     -- `require("flash").prompt()` is always available to get the prompt text
     prompt = {
       enabled = true,
-      prefix = { { '⚡ Jump', 'FlashPromptIcon' } },
+      prefix = { { '⚡', 'FlashPromptIcon' } },
       win_config = {
         relative = 'editor',
-        width = 10, -- when <=1 it's a percentage of the editor width
+        border = 'none',
+        width = 1, -- when <=1 it's a percentage of the editor width
         height = 1,
         row = -1, -- when negative it's an offset from the bottom
         col = 0, -- when negative it's an offset from the right

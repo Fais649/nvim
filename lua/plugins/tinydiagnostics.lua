@@ -37,10 +37,10 @@ return {
         },
 
         -- Use icons from vim.diagnostic.config instead of preset icons
-        use_icons_from_diagnostic = true,
+        use_icons_from_diagnostic = false,
 
         -- Color the arrow to match the severity of the first diagnostic
-        set_arrow_to_diag_color = true,
+        set_arrow_to_diag_color = false,
 
         -- Throttle update frequency in milliseconds to improve performance
         -- Higher values reduce CPU usage but may feel less responsive
@@ -54,23 +54,23 @@ return {
         -- NOTE: When using display_count = true, you need to enable multiline diagnostics with multilines.enabled = true
         --       If you want them to always be displayed, you can also set multilines.always_show = true.
         add_messages = {
-          messages = false, -- Show full diagnostic messages
-          display_count = true, -- Show diagnostic count instead of messages when cursor not on line
+          messages = true, -- Show full diagnostic messages
+          display_count = false, -- Show diagnostic count instead of messages when cursor not on line
           use_max_severity = false, -- When counting, only show the most severe diagnostic
           show_multiple_glyphs = true, -- Show multiple icons for multiple diagnostics of same severity
         },
 
         -- Settings for multiline diagnostics
         multilines = {
-          enabled = true, -- Enable support for multiline diagnostic messages
+          enabled = false, -- Enable support for multiline diagnostic messages
           always_show = false, -- Always show messages on all lines of multiline diagnostics
-          trim_whitespaces = true, -- Remove leading/trailing whitespace from each line
+          trim_whitespaces = false, -- Remove leading/trailing whitespace from each line
           tabstop = 4, -- Number of spaces per tab when expanding tabs
           severity = nil, -- Filter multiline diagnostics by severity (e.g., { vim.diagnostic.severity.ERROR })
         },
 
         -- Show all diagnostics on the current cursor line, not just those under the cursor
-        show_all_diags_on_cursorline = true,
+        show_all_diags_on_cursorline = false,
 
         -- Display related diagnostics from LSP relatedInformation
         show_related = {
@@ -93,8 +93,8 @@ return {
 
         -- Break long messages into separate lines
         break_line = {
-          enabled = true, -- Enable automatic line breaking
-          after = 40, -- Number of characters before inserting a line break
+          enabled = false, -- Enable automatic line breaking
+          after = 30, -- Number of characters before inserting a line break
         },
 
         -- Custom function to format diagnostic messages

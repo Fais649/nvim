@@ -12,42 +12,91 @@ vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)', { desc = '[p]ut After
 vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)', { desc = '[p]ut Before' })
 -- harpoon
 local harpoon = require 'harpoon'
-vim.keymap.set('n', '<leader>aa', function()
+vim.keymap.set('n', '<leader>h', function()
   harpoon:list():add()
-end, { desc = 'h[a]rpoon [a]dd' })
-vim.keymap.set('n', '<leader>am', function()
+end, { desc = '[h]arpoon add' })
+vim.keymap.set('n', '<leader>H', function()
   harpoon.ui:toggle_quick_menu(harpoon:list())
-end, { desc = 'h[a]rpoon [m]enu' })
-vim.keymap.set('n', '<leader>a1', function()
+end, { desc = '[H]arpoon menu' })
+vim.keymap.set('n', '<leader>1', function()
   harpoon:list():select(1)
 end, { desc = 'h[a]rpoon [1]' })
-vim.keymap.set('n', '<leader>a2', function()
+vim.keymap.set('n', '<leader>2', function()
   harpoon:list():select(2)
-end, { desc = 'h[a]rpoon [2]' })
-vim.keymap.set('n', '<leader>a3', function()
+end, { desc = 'harpoon [2]' })
+vim.keymap.set('n', '<leader>3', function()
   harpoon:list():select(3)
-end, { desc = 'h[a]rpoon [3]' })
-vim.keymap.set('n', '<leader>a4', function()
+end, { desc = 'harpoon [3]' })
+vim.keymap.set('n', '<leader>4', function()
   harpoon:list():select(4)
-end, { desc = 'h[a]rpoon [4]' })
--- Toggle previous & next buffers stored within Harpoon list
-vim.keymap.set('n', '<C-S-up>', function()
+end, { desc = 'harpoon [4]' })
+vim.keymap.set('n', '<leader>k', function()
   harpoon:list():prev()
-end)
-vim.keymap.set('n', '<C-S-down>', function()
+end, { desc = 'harpoon previous' })
+vim.keymap.set('n', '<leader>j', function()
   harpoon:list():next()
-end)
+end, { desc = 'harpoon next' })
 -- fzf
 local fzf = require 'fzf-lua'
 vim.keymap.set('n', '<leader>fc', function()
   fzf.files { cwd = vim.fn.stdpath 'config' }
 end, { desc = '[c]onfig Neovim' })
--- tmux
-local nvim_tmux_nav = require 'nvim-tmux-navigation'
-vim.keymap.set('n', '<M-h>', nvim_tmux_nav.NvimTmuxNavigateLeft)
-vim.keymap.set('n', '<M-j>', nvim_tmux_nav.NvimTmuxNavigateDown)
-vim.keymap.set('n', '<M-k>', nvim_tmux_nav.NvimTmuxNavigateUp)
-vim.keymap.set('n', '<M-l>', nvim_tmux_nav.NvimTmuxNavigateRight)
+
+vim.keymap.set('n', '<C-A-h>', require('smart-splits').resize_left)
+vim.keymap.set('n', '<C-A-j>', require('smart-splits').resize_down)
+vim.keymap.set('n', '<C-A-k>', require('smart-splits').resize_up)
+vim.keymap.set('n', '<C-A-l>', require('smart-splits').resize_right)
+-- moving between splits
+vim.keymap.set('n', '<A-h>', require('smart-splits').move_cursor_left)
+vim.keymap.set('n', '<A-j>', require('smart-splits').move_cursor_down)
+vim.keymap.set('n', '<A-k>', require('smart-splits').move_cursor_up)
+vim.keymap.set('n', '<A-l>', require('smart-splits').move_cursor_right)
+vim.keymap.set('n', '<A-\\>', require('smart-splits').move_cursor_previous)
 -- neogen
 vim.keymap.set('n', '<leader>ec', ":lua require('neogen').generate()<CR>", { desc = '[c]omment' })
 ----------------------------------------------------------
+--- neotree
+-- vim.keymap.set('n', '<C-e>', '<Cmd>Neotree<CR>')
+
+-- local function openBufferSwitcher()
+--   return function()
+--     require('snacks.picker').buffers {
+--       finder = 'buffers',
+--       format = 'buffer',
+--       hidden = false,
+--       unloaded = true,
+--       current = true,
+--       sort_lastused = true,
+--       win = {
+--         input = {
+--           keys = {
+--             ['<c-x>'] = { 'bufdelete', mode = { 'n', 'i' } },
+--             ['<c-k>'] = { 'list_up', mode = { 'n', 'i' } },
+--             ['<c-j>'] = { 'list_down', mode = { 'n', 'i' } },
+--           },
+--         },
+--         list = { keys = { ['dd'] = 'bufdelete' } },
+--       },
+--       layout = { preset = 'vscode', border = 'single' },
+--       on_show = function(picker)
+--         require('snacks.picker').actions.list_down(picker)
+--       end,
+--     }
+--   end
+-- end
+
+-- vim.keymap.set('n', '<C-k>', openPrevBufferSwitcher(), { desc = 'bufswitch' })
+-- vim.keymap.set('n', '<C-j>', openBufferSwitcher(), { desc = 'bufswitch' })
+
+-- local oil = require 'oil'
+--
+-- local function toggleOil()
+--   if oil.get_cursor_entry() then
+--     oil.toggle_float()
+--   else
+--     oil.open_float(oil.get_current_dir(), { preview = {} })
+--   end
+-- end
+--
+-- vim.keymap.set('n', '<C-e>', toggleOil, { desc = 'Toggle Oil' })
+--

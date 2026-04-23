@@ -4,9 +4,42 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
+    styles = {
+      zen = {
+        enter = true,
+        fixbuf = false,
+        minimal = false,
+        width = 160,
+        height = 0,
+        backdrop = { transparent = true, blend = 40 },
+        keys = { q = false },
+        zindex = 40,
+        wo = {
+          winhighlight = 'NormalFloat:Normal',
+        },
+        w = {
+          snacks_main = true,
+        },
+      },
+      picker = {
+        hidden = { 'preview' },
+        layout = {
+          backdrop = false,
+          row = 1,
+          width = 0.4,
+          min_width = 80,
+          height = 0.4,
+          border = 'single',
+          box = 'vertical',
+          { win = 'input', height = 1, border = true, title = '{title} {live} {flags}', title_pos = 'center' },
+          { win = 'list', border = 'hpad' },
+          { win = 'preview', title = '{preview}', border = true },
+        },
+      },
+    },
     bigfile = { enabled = false },
     dashboard = {
-      width = 60,
+      width = 40,
       row = nil, -- dashboard position. nil for center
       col = nil, -- dashboard position. nil for center
       pane_gap = 4, -- empty columns between vertical panes
@@ -73,19 +106,53 @@ return {
         { section = 'startup' },
       },
     },
-    -- explorer = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
     image = { enabled = true },
     quickfile = { enabled = true },
-    picker = { enabled = false },
+    picker = { enabled = true, lazy = false },
     dim = { enabled = false },
-    notifier = { enabled = true },
+    notifier = {
+      enabled = true,
+    },
     scope = { enabled = false },
     -- scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = false },
-    zen = { enabled = false },
+    zen = {
+      enabled = false,
+      toggles = {
+        dim = false,
+        -- git_signs = false,
+        -- mini_diff_signs = false,
+        -- diagnostics = false,
+        -- inlay_hints = false,
+      },
+      center = true, -- center the window
+      show = {
+        statusline = true, -- can only be shown when using the global statusline
+        tabline = true,
+      },
+      ---@type snacks.win.Config
+      win = { style = 'zen' },
+      --- Callback when the window is opened.
+      ---@param win snacks.win
+      on_open = function(win) end,
+      --- Callback when the window is closed.
+      ---@param win snacks.win
+      on_close = function(win) end,
+      --- Options for the `Snacks.zen.zoom()`
+      ---@type snacks.zen.Config
+      zoom = {
+        toggles = {},
+        center = false,
+        show = { statusline = true, tabline = true },
+        win = {
+          backdrop = false,
+          width = 0, -- full width
+        },
+      },
+    },
   },
 }
 --[[
