@@ -7,7 +7,7 @@ vim.o.relativenumber = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
 vim.o.showtabline = 1
-vim.o.winborder = 'rounded'
+vim.o.winborder = 'single'
 vim.o.spell = false
 vim.o.spelllang = 'en_us'
 vim.schedule(function()
@@ -53,8 +53,6 @@ vim.o.autoread = true
 vim.o.autocomplete = false
 vim.o.pumborder = 'rounded'
 vim.o.pummaxwidth = 40
-vim.o.completeopt = 'menu,menuone,noselect,preinsert'
--- vim.o.complete = 'REGEX'
 vim.o.fillchars = 'foldopen: ,foldclose: ,foldsep: ,diff:=,eob: '
 
 vim.filetype.add {

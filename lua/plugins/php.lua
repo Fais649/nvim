@@ -1,6 +1,7 @@
 return {
   {
     'ccaglak/phptools.nvim',
+    enabled = false,
     keys = {
       { '<leader>Pg', '<cmd>PhpTools GetSet<cr>', desc = '[g]etters/setters' },
       { '<leader>Pn', '<cmd>PhpTools Create<cr>', desc = '[n]ew *' },

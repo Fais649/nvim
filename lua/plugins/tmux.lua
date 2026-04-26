@@ -1,8 +1,9 @@
 return {
   {
     'alexghergh/nvim-tmux-navigation',
+    enabled = false,
     config = function()
-      require('nvim-tmux-navigation').setup { disable_when_zoomed = true }
+      require('nvim-tmux-navigation').setup { disable_when_zoomed = false }
     end,
   },
   {
@@ -77,7 +78,7 @@ return {
         -- disable multiplexer navigation if current multiplexer pane is zoomed
         -- NOTE: This does not work on Zellij as there is no way to determine the
         -- pane zoom state outside of the Zellij Plugin API, which does not apply here
-        disable_multiplexer_nav_when_zoomed = true,
+        disable_multiplexer_nav_when_zoomed = false,
         -- Supply a Kitty remote control password if needed,
         -- or you can also set vim.g.smart_splits_kitty_password
         -- see https://sw.kovidgoyal.net/kitty/conf/#opt-kitty.remote_control_password
